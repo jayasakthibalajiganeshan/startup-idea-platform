@@ -30,6 +30,25 @@ function Dashboard() {
     }
   };
 
+  // 🗑 Delete idea
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/ideas/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      alert("Idea deleted successfully 🔥");
+
+      fetchMyIdeas(); // refresh dashboard
+    } catch (err) {
+      console.log(err.response?.data || err.message);
+
+      alert("Delete failed ❌");
+    }
+  };
+
   return (
     <div>
       <h2>📊 My Dashboard</h2>
@@ -49,6 +68,21 @@ function Dashboard() {
             <h3>{idea.title}</h3>
             <p>{idea.description}</p>
             <p>👍 {idea.votes}</p>
+
+            {/* 🗑 Delete Button */}
+            <button
+              onClick={() => handleDelete(idea._id)}
+              style={{
+                marginTop: "10px",
+                backgroundColor: "red",
+                color: "white",
+                border: "none",
+                padding: "5px 10px",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
           </div>
         ))
       )}
